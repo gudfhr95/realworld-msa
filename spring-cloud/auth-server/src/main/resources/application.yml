@@ -1,0 +1,22 @@
+server.port: 9000
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/user-db
+    username: user
+    password: pwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari.initialization-fail-timeout: 60000
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    io.realworld: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management.endpoint.health.show-details: always
+management.endpoints.web.exposure.include: "*"
