@@ -7,7 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.dto.LoginRequestDto;
-import io.realworld.springcloud.authserver.dto.LoginResponseDto;
+import io.realworld.springcloud.authserver.dto.UserDto;
 import io.realworld.springcloud.authserver.entity.User;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -65,10 +65,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       throw new IllegalStateException(ex);
     }
 
-    LoginResponseDto loginResponseDto = new LoginResponseDto(user.getUsername(), token, null, null,
-        null);
+    UserDto userDto = UserDto.builder()
+        .email(user.getEmail())
+        .token(token)
+        .username(user.getRealUsername())
+        .bio(user.getBio())
+        .image(user.getImage())
+        .build();
 
     response.setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-    response.getOutputStream().write(objectMapper.writeValueAsBytes(loginResponseDto));
+    response.getOutputStream().write(objectMapper.writeValueAsBytes(userDto));
   }
 }
