@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.dto.LoginRequestDto;
 import io.realworld.springcloud.authserver.dto.LoginResponseDto;
+import io.realworld.springcloud.authserver.entity.User;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
@@ -17,7 +18,6 @@ import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
 

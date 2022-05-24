@@ -11,15 +11,15 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import io.realworld.springcloud.authserver.entity.User;
 import java.text.ParseException;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 
 @RequiredArgsConstructor
 public final class JwtUtils {
 
-  private static final long EXPIRES_IN = 20 * 60;
+  private static final long EXPIRES_IN = 365L * 24 * 60 * 60 * 1000;
 
   public static String generateToken(User user, RSAKey rsaJWK) throws JOSEException {
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
