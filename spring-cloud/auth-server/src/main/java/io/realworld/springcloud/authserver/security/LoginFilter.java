@@ -5,10 +5,10 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.dto.LoginRequestDto;
 import io.realworld.springcloud.authserver.dto.LoginResponseDto;
 import java.io.IOException;
-import java.security.KeyPair;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +27,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
-  private final KeyPair keyPair;
+  private final RSAKey rsaJWK;
 
-  public LoginFilter(AuthenticationManager authenticationManager, KeyPair keyPair) {
+  public LoginFilter(AuthenticationManager authenticationManager, RSAKey rsaJWK) {
     super(authenticationManager);
 
-    this.keyPair = keyPair;
+    this.rsaJWK = rsaJWK;
 
     setFilterProcessesUrl("/api/users/login");
   }
@@ -60,9 +60,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
   ) throws IOException {
     User user = (User) authentication.getPrincipal();
 
-    LoginResponseDto loginResponseDto = new LoginResponseDto(user.getUsername(), null, null, null,
+    String token;
+    try {
+      token = JwtUtils.generateToken(user, rsaJWK);
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
+    }
+
+    LoginResponseDto loginResponseDto = new LoginResponseDto(user.getUsername(), token, null, null,
         null);
-    
+
     response.setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE);
     response.getOutputStream().write(objectMapper.writeValueAsBytes(loginResponseDto));
   }

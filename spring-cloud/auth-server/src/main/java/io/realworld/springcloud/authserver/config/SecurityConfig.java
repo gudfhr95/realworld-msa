@@ -1,8 +1,8 @@
 package io.realworld.springcloud.authserver.config;
 
+import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.jose.Jwks;
 import io.realworld.springcloud.authserver.security.LoginFilter;
-import java.security.KeyPair;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,7 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    LoginFilter loginFilter = new LoginFilter(authenticationManager(), keyPair());
+    LoginFilter loginFilter = new LoginFilter(authenticationManager(), rsaJWK());
 
     http.csrf().disable()
         .cors().disable()
@@ -33,9 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  public KeyPair keyPair() {
+  public RSAKey rsaJWK() {
     try {
-      return Jwks.generateRsa().toKeyPair();
+      return Jwks.generateRsa();
     } catch (Exception ex) {
       throw new IllegalStateException(ex);
     }
