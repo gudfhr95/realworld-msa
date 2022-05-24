@@ -4,19 +4,29 @@ import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.jose.Jwks;
 import io.realworld.springcloud.authserver.security.JwtAuthenticationFilter;
 import io.realworld.springcloud.authserver.security.LoginFilter;
+import io.realworld.springcloud.authserver.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+  private final UserService userService;
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
+      throws Exception {
+    authenticationManagerBuilder.userDetailsService(userService);
+  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -31,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/actuator/**").permitAll()
         .antMatchers("/.well-knwon/jwks.json").permitAll()
+        .antMatchers("/api/users").permitAll()
         .anyRequest().authenticated()
         .and()
         .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
@@ -47,13 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
-  UserDetailsService users() {
-    UserDetails user = User.withDefaultPasswordEncoder()
-        .username("test@test.com")
-        .password("qwer1234")
-        .roles("USER")
-        .build();
-
-    return new InMemoryUserDetailsManager(user);
+  PasswordEncoder passwordEncoder() {
+    return NoOpPasswordEncoder.getInstance();
   }
 }

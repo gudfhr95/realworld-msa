@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     String token = request.getHeader(AUTHORIZATION);
     if (token == null || !token.startsWith("Token ")) {
       chain.doFilter(request, response);
+      return;
     }
 
     String jwt = token.substring("Token ".length());
