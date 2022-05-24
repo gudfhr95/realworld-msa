@@ -5,10 +5,13 @@ import static com.nimbusds.jose.JWSAlgorithm.RS256;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.text.ParseException;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -35,5 +38,17 @@ public final class JwtUtils {
     signedJWT.sign(signer);
 
     return signedJWT.serialize();
+  }
+
+  public static SignedJWT verify(String jwt, RSAKey rsaJWK) throws ParseException, JOSEException {
+    SignedJWT signedJWT = SignedJWT.parse(jwt);
+
+    JWSVerifier verifier = new RSASSAVerifier(rsaJWK.toPublicJWK());
+
+    if (!signedJWT.verify(verifier)) {
+      return null;
+    }
+
+    return signedJWT;
   }
 }

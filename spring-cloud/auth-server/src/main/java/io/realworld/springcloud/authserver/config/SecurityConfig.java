@@ -2,6 +2,7 @@ package io.realworld.springcloud.authserver.config;
 
 import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.jose.Jwks;
+import io.realworld.springcloud.authserver.security.JwtAuthenticationFilter;
 import io.realworld.springcloud.authserver.security.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -19,6 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     LoginFilter loginFilter = new LoginFilter(authenticationManager(), rsaJWK());
+    JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
+        authenticationManager(), rsaJWK());
 
     http.csrf().disable()
         .cors().disable()
@@ -29,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/.well-knwon/jwks.json").permitAll()
         .anyRequest().authenticated()
         .and()
-        .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAt(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
   }
 
   @Bean
