@@ -6,11 +6,11 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 @JsonTypeName("user")
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
-@Value
+@Data
 @Builder
 public class UserDto {
 

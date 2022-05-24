@@ -9,6 +9,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.dto.LoginRequestDto;
 import io.realworld.springcloud.authserver.dto.UserDto;
 import io.realworld.springcloud.authserver.entity.User;
+import io.realworld.springcloud.authserver.mapper.UserMapper;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
@@ -25,11 +26,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
+  private final UserMapper userMapper;
   private final RSAKey rsaJWK;
 
-  public LoginFilter(AuthenticationManager authenticationManager, RSAKey rsaJWK) {
+  public LoginFilter(AuthenticationManager authenticationManager, UserMapper userMapper,
+      RSAKey rsaJWK) {
     super(authenticationManager);
 
+    this.userMapper = userMapper;
     this.rsaJWK = rsaJWK;
 
     setFilterProcessesUrl("/api/users/login");
@@ -65,13 +69,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       throw new IllegalStateException(ex);
     }
 
-    UserDto userDto = UserDto.builder()
-        .email(user.getEmail())
-        .token(token)
-        .username(user.getRealUsername())
-        .bio(user.getBio())
-        .image(user.getImage())
-        .build();
+    UserDto userDto = userMapper.entityToDto(user);
+    userDto.setToken(token);
 
     response.setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE);
     response.getOutputStream().write(objectMapper.writeValueAsBytes(userDto));

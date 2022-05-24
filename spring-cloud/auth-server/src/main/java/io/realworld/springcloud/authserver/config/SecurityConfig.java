@@ -2,6 +2,7 @@ package io.realworld.springcloud.authserver.config;
 
 import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.jose.Jwks;
+import io.realworld.springcloud.authserver.mapper.UserMapper;
 import io.realworld.springcloud.authserver.security.JwtAuthenticationFilter;
 import io.realworld.springcloud.authserver.security.LoginFilter;
 import io.realworld.springcloud.authserver.service.UserService;
@@ -22,6 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserService userService;
 
+  private final UserMapper userMapper;
+
   @Override
   protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
       throws Exception {
@@ -30,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    LoginFilter loginFilter = new LoginFilter(authenticationManager(), rsaJWK());
+    LoginFilter loginFilter = new LoginFilter(authenticationManager(), userMapper, rsaJWK());
     JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
         authenticationManager(), rsaJWK());
 

@@ -22,16 +22,16 @@ public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findUserByEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException(username));
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return userRepository.findUserByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException(email));
   }
 
   public User save(User user) {
     return userRepository.save(user);
   }
 
-  public Optional<User> findUser(String email) {
+  public Optional<User> findUserByEmail(String email) {
     return userRepository.findUserByEmail(email);
   }
 

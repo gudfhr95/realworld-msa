@@ -23,7 +23,7 @@ public final class JwtUtils {
 
   public static String generateToken(User user, RSAKey rsaJWK) throws JOSEException {
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-        .subject(user.getUsername())
+        .subject(user.getEmail())
         .expirationTime(new Date(new Date().getTime() + EXPIRES_IN))
         .build();
 
