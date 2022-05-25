@@ -4,6 +4,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.nimbusds.jose.jwk.RSAKey;
 import io.realworld.springcloud.authserver.dto.RegisterRequestDto;
+import io.realworld.springcloud.authserver.dto.UpdateRequestDto;
 import io.realworld.springcloud.authserver.dto.UserDto;
 import io.realworld.springcloud.authserver.entity.User;
 import io.realworld.springcloud.authserver.mapper.UserMapper;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,6 +59,24 @@ public class AuthController {
     String token = JwtUtils.generateToken(savedUser, rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(savedUser);
+    userDto.setToken(token);
+
+    return userDto;
+  }
+
+  @SneakyThrows
+  @PutMapping("/api/user")
+  public UserDto update(@RequestBody UpdateRequestDto body) {
+    String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    User user = userService.findUserByEmail(email).get();
+
+    User updatedUser = userMapper.updateRequestDtoToEntity(body, user);
+    updatedUser = userService.save(updatedUser);
+
+    String token = JwtUtils.generateToken(updatedUser, rsaJwk);
+
+    UserDto userDto = userMapper.entityToDto(updatedUser);
     userDto.setToken(token);
 
     return userDto;
