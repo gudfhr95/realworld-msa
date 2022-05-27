@@ -5,18 +5,16 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.Data;
 
 @JsonTypeName("user")
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
-@NoArgsConstructor(force = true)
-@Value
+@Data
 public class UpdateRequestDto {
 
-  public String email;
-  public String username;
-  public String password;
-  public String image;
-  public String bio;
+  private String email;
+  private String username;
+  private String password;
+  private String image;
+  private String bio;
 }
