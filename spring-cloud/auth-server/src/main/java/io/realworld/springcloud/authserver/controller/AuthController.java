@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
@@ -31,7 +33,7 @@ public class AuthController {
   private final UserMapper userMapper;
   private final RSAKey rsaJwk;
 
-  @GetMapping("/api/user")
+  @GetMapping("/user")
   public UserDto me(HttpServletRequest request) {
     String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -45,7 +47,7 @@ public class AuthController {
   }
 
   @SneakyThrows
-  @PostMapping("/api/users")
+  @PostMapping("/users")
   public UserDto register(@RequestBody RegisterRequestDto body) {
     User user = User.builder()
         .email(body.getEmail())
@@ -65,7 +67,7 @@ public class AuthController {
   }
 
   @SneakyThrows
-  @PutMapping("/api/user")
+  @PutMapping("/user")
   public UserDto update(@RequestBody UpdateRequestDto body) {
     String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

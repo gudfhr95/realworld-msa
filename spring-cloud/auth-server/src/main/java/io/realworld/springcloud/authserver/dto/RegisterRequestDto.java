@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 @JsonTypeName("user")
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
 @NoArgsConstructor(force = true)
-@Value
+@Data
 public class RegisterRequestDto {
 
   @NotNull
