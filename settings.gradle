@@ -1,1 +1,1 @@
-include ':spring-cloud:auth-server'
+include ':microservices:auth-server'

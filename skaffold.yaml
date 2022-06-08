@@ -5,7 +5,7 @@ metadata:
 build:
   artifacts:
     - image: realworld-msa/auth-server
-      context: spring-cloud/auth-server
+      context: microservices/auth-server
       docker:
         dockerfile: Dockerfile
 deploy:
