@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-server
+  name: auth-service
   labels:
-    app: auth-server
+    app: auth-service
 spec:
   selector:
-    app: auth-server
+    app: auth-service
   ports:
     - port: 9000
       protocol: TCP

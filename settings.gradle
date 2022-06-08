@@ -1,1 +1,1 @@
-include ':microservices:auth-server'
+include ':microservices:auth-service'

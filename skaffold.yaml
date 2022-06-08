@@ -4,8 +4,8 @@ metadata:
   name: realworld-msa
 build:
   artifacts:
-    - image: realworld-msa/auth-server
-      context: microservices/auth-server
+    - image: realworld-msa/auth-service
+      context: microservices/auth-service
       docker:
         dockerfile: Dockerfile
 deploy:
@@ -14,5 +14,5 @@ deploy:
       - "k8s/**/*.yaml"
 portForward:
   - resourceType: service
-    resourceName: auth-server
+    resourceName: auth-service
     port: 9000
