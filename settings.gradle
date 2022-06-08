@@ -1,1 +1,2 @@
 include ':microservices:auth-service'
+include ':microservices:profile-service'
