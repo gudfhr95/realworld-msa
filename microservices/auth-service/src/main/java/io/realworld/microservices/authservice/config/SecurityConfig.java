@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logout().disable()
         .authorizeRequests()
         .antMatchers("/actuator/**").permitAll()
-        .antMatchers("/.well-knwon/jwks.json").permitAll()
+        .antMatchers("/.well-known/jwks.json").permitAll()
         .antMatchers("/api/users").permitAll()
         .anyRequest().authenticated()
         .and()

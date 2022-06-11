@@ -21,3 +21,10 @@ spec:
                 name: auth-service
                 port:
                   number: 9000
+          - path: /api/profiles
+            pathType: Prefix
+            backend:
+              service:
+                name: profile-service
+                port:
+                  number: 9001
