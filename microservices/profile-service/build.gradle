@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':api')
     implementation project(':util')
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'

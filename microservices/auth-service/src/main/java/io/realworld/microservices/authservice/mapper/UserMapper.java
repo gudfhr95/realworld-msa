@@ -2,6 +2,7 @@ package io.realworld.microservices.authservice.mapper;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+import io.realworld.api.message.UserMessage;
 import io.realworld.microservices.authservice.dto.UpdateRequestDto;
 import io.realworld.microservices.authservice.dto.UserDto;
 import io.realworld.microservices.authservice.entity.User;
@@ -24,4 +25,6 @@ public interface UserMapper {
       UpdateRequestDto updateRequestDto,
       @MappingTarget User user
   );
+
+  UserMessage entityToUserMessage(User user);
 }

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.realworld.microservices.authservice.dto.RegisterRequestDto;
 import io.realworld.microservices.authservice.dto.UpdateRequestDto;
 import io.realworld.microservices.authservice.entity.User;
+import io.realworld.microservices.authservice.kafka.UserProducer;
 import io.realworld.microservices.authservice.mapper.UserMapper;
 import io.realworld.microservices.authservice.mapper.UserMapperImpl;
 import io.realworld.microservices.authservice.security.MockedJwtAuthenticationFilter;
@@ -43,6 +44,8 @@ class AuthControllerTest {
 
   @MockBean
   UserService userService;
+  @MockBean
+  UserProducer userProducer;
   @Autowired
   UserMapper userMapper;
   @Autowired

@@ -7,6 +7,7 @@ import io.realworld.microservices.authservice.dto.RegisterRequestDto;
 import io.realworld.microservices.authservice.dto.UpdateRequestDto;
 import io.realworld.microservices.authservice.dto.UserDto;
 import io.realworld.microservices.authservice.entity.User;
+import io.realworld.microservices.authservice.kafka.UserProducer;
 import io.realworld.microservices.authservice.mapper.UserMapper;
 import io.realworld.microservices.authservice.service.UserService;
 import io.realworld.util.security.JwtUtils;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final UserService userService;
+  private final UserProducer userProducer;
 
   private final UserMapper userMapper;
   private final RSAKey rsaJwk;
@@ -58,6 +60,8 @@ public class AuthController {
     User savedUser = userService.save(user);
     userService.addAuthority(savedUser.getUserId(), "ROLE_USER");
 
+    userProducer.sendCreateMessage(userMapper.entityToUserMessage(savedUser));
+
     String token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(savedUser);
@@ -75,6 +79,8 @@ public class AuthController {
 
     User updatedUser = userMapper.updateRequestDtoToEntity(body, user);
     updatedUser = userService.save(updatedUser);
+
+    userProducer.sendUpdateMessage(userMapper.entityToUserMessage(updatedUser));
 
     String token = JwtUtils.generateToken(updatedUser.getEmail(), updatedUser.getUserId(), rsaJwk);
 
