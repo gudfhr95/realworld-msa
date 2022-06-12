@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
-        signedJWT.getJWTClaimsSet().getSubject(), null, null
+        signedJWT.getJWTClaimsSet().getClaim("user_id"), null, null
     );
     SecurityContextHolder.getContext().setAuthentication(userToken);
 
