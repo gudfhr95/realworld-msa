@@ -8,8 +8,8 @@ import io.realworld.microservices.authservice.dto.UpdateRequestDto;
 import io.realworld.microservices.authservice.dto.UserDto;
 import io.realworld.microservices.authservice.entity.User;
 import io.realworld.microservices.authservice.mapper.UserMapper;
-import io.realworld.microservices.authservice.security.JwtUtils;
 import io.realworld.microservices.authservice.service.UserService;
+import io.realworld.util.security.JwtUtils;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -58,7 +58,7 @@ public class AuthController {
     User savedUser = userService.save(user);
     userService.addAuthority(savedUser.getUserId(), "ROLE_USER");
 
-    String token = JwtUtils.generateToken(savedUser, rsaJwk);
+    String token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(savedUser);
     userDto.setToken(token);
@@ -76,7 +76,7 @@ public class AuthController {
     User updatedUser = userMapper.updateRequestDtoToEntity(body, user);
     updatedUser = userService.save(updatedUser);
 
-    String token = JwtUtils.generateToken(updatedUser, rsaJwk);
+    String token = JwtUtils.generateToken(updatedUser.getEmail(), updatedUser.getUserId(), rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(updatedUser);
     userDto.setToken(token);

@@ -10,6 +10,7 @@ import io.realworld.microservices.authservice.dto.LoginRequestDto;
 import io.realworld.microservices.authservice.dto.UserDto;
 import io.realworld.microservices.authservice.entity.User;
 import io.realworld.microservices.authservice.mapper.UserMapper;
+import io.realworld.util.security.JwtUtils;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletInputStream;
@@ -64,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     String token;
     try {
-      token = JwtUtils.generateToken(user, rsaJWK);
+      token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), rsaJWK);
     } catch (Exception ex) {
       throw new IllegalStateException(ex);
     }

@@ -1,4 +1,4 @@
-package io.realworld.microservices.authservice.security;
+package io.realworld.util.security;
 
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
@@ -11,7 +11,6 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import io.realworld.microservices.authservice.entity.User;
 import java.text.ParseException;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +20,12 @@ public final class JwtUtils {
 
   private static final long EXPIRES_IN = 365L * 24 * 60 * 60 * 1000;
 
-  public static String generateToken(User user, RSAKey rsaJWK) throws JOSEException {
+  public static String generateToken(String email, Long userId, RSAKey rsaJWK)
+      throws JOSEException {
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-        .subject(user.getEmail())
+        .subject(email)
         .expirationTime(new Date(new Date().getTime() + EXPIRES_IN))
-        .claim("user_id", user.getUserId())
+        .claim("user_id", userId)
         .build();
 
     SignedJWT signedJWT = new SignedJWT(

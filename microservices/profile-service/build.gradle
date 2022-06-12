@@ -17,6 +17,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(':util')
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -41,4 +43,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    enabled = false
 }
