@@ -21,7 +21,6 @@ import io.realworld.microservices.authservice.mapper.UserMapperImpl;
 import io.realworld.microservices.authservice.security.MockedJwtAuthenticationFilter;
 import io.realworld.microservices.authservice.service.UserService;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(AuthController.class)
 @ComponentScan(basePackageClasses = {UserMapper.class, UserMapperImpl.class})
-@Slf4j
 class AuthControllerTest {
 
   @Autowired
@@ -54,7 +52,7 @@ class AuthControllerTest {
   User user;
 
   @BeforeEach
-  public void setupWebApplicationContext() {
+  public void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
         .addFilter(new MockedJwtAuthenticationFilter())
         .build();
