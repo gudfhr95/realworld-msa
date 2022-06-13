@@ -4,15 +4,26 @@ metadata:
   name: realworld-msa
 build:
   artifacts:
-    - image: realworld-msa/auth-server
-      context: spring-cloud/auth-server
+    - image: realworld-msa/auth-service
+      context: microservices/auth-service
+      docker:
+        dockerfile: Dockerfile
+    - image: realworld-msa/profile-service
+      context: microservices/profile-service
       docker:
         dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
-      - k8s/**/**/*.yaml
+      - "k8s/**/*.yaml"
+  helm:
+    releases:
+      - name: kafka
+        remoteChart: bitnami/kafka
 portForward:
   - resourceType: service
-    resourceName: auth-server
+    resourceName: auth-service
     port: 9000
+  - resourceType: service
+    resourceName: profile-service
+    port: 9001
