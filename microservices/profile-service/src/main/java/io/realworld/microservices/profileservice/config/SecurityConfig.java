@@ -32,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logout().disable()
         .authorizeRequests()
         .antMatchers("/actuator/**").permitAll()
+        .antMatchers("/api/profiles/**").permitAll()
+        .antMatchers("/api/profiles/**/follow").authenticated()
         .anyRequest().authenticated()
         .and()
         .addFilterAt(jwtAuthenticationFilter, BasicAuthenticationFilter.class);

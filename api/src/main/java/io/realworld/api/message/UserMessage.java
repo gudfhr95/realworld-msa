@@ -1,8 +1,10 @@
 package io.realworld.api.message;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class UserMessage {
 
   public static final String CREATE = "create-user";
