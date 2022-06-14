@@ -4,7 +4,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,10 +32,8 @@ public class Article extends BaseTime {
   @Version
   private int version;
 
-  @Column(unique = true, nullable = false)
   private String slug;
 
-  @Column(nullable = false)
   private String title;
 
   private String description;

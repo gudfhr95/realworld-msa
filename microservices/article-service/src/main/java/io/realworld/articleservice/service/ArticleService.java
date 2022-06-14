@@ -4,15 +4,13 @@ import io.realworld.articleservice.entity.Article;
 import io.realworld.articleservice.repository.ArticleRepository;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
-
-  private final RestTemplate restTemplate;
 
   private final ArticleRepository articleRepository;
 
@@ -26,9 +24,14 @@ public class ArticleService {
         .tagList(new HashSet<>(List.of(tagList)))
         .author(author)
         .build();
+
     articleRepository.save(article);
 
     return article;
+  }
+
+  public Optional<Article> findArticleBySlug(String slug) {
+    return articleRepository.findBySlug(slug);
   }
 
   private String makeSlug(String title) {

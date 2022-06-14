@@ -1,10 +1,15 @@
 package io.realworld.articleservice.mapper;
 
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
+
 import io.realworld.articleservice.dto.ArticleDto;
+import io.realworld.articleservice.dto.UpdateArticleDto;
 import io.realworld.articleservice.entity.Article;
 import java.util.Set;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
@@ -20,5 +25,17 @@ public interface ArticleMapper {
   @Named("favoritesCount")
   public static int countFavorites(Set<Long> favoritedUsers) {
     return favoritedUsers.size();
+  }
+
+  @BeanMapping(nullValuePropertyMappingStrategy = IGNORE)
+  @Mappings({
+      @Mapping(source = "title", target = "slug", qualifiedByName = "makeSlug")
+  })
+  Article updateArticleDtoToEntity(UpdateArticleDto updateArticleDto,
+      @MappingTarget Article article);
+
+  @Named("makeSlug")
+  public static String makeSlug(String title) {
+    return title.toLowerCase().replace(' ', '-');
   }
 }
