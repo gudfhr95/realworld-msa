@@ -14,7 +14,6 @@ import io.realworld.util.security.JwtUtils;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Slf4j
 public class AuthController {
 
   private final UserService userService;
@@ -62,7 +60,8 @@ public class AuthController {
 
     userProducer.sendCreateMessage(userMapper.entityToUserMessage(savedUser));
 
-    String token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), rsaJwk);
+    String token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), user.getUsername(),
+        rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(savedUser);
     userDto.setToken(token);
@@ -82,7 +81,8 @@ public class AuthController {
 
     userProducer.sendUpdateMessage(userMapper.entityToUserMessage(updatedUser));
 
-    String token = JwtUtils.generateToken(updatedUser.getEmail(), updatedUser.getUserId(), rsaJwk);
+    String token = JwtUtils.generateToken(updatedUser.getEmail(), updatedUser.getUserId(),
+        updatedUser.getUsername(), rsaJwk);
 
     UserDto userDto = userMapper.entityToDto(updatedUser);
     userDto.setToken(token);

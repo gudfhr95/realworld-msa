@@ -1,7 +1,7 @@
 package io.realworld.microservices.profileservice.controller;
 
+import io.realworld.api.dto.ProfileDto;
 import io.realworld.microservices.profileservice.dto.FollowRequestDto;
-import io.realworld.microservices.profileservice.dto.ProfileDto;
 import io.realworld.microservices.profileservice.entity.Profile;
 import io.realworld.microservices.profileservice.mapper.ProfileMapper;
 import io.realworld.microservices.profileservice.service.ProfileService;

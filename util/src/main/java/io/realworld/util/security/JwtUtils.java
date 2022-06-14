@@ -20,12 +20,13 @@ public final class JwtUtils {
 
   private static final long EXPIRES_IN = 365L * 24 * 60 * 60 * 1000;
 
-  public static String generateToken(String email, Long userId, RSAKey rsaJWK)
+  public static String generateToken(String email, Long userId, String username, RSAKey rsaJWK)
       throws JOSEException {
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
         .subject(email)
         .expirationTime(new Date(new Date().getTime() + EXPIRES_IN))
         .claim("user_id", userId)
+        .claim("username", username)
         .build();
 
     SignedJWT signedJWT = new SignedJWT(

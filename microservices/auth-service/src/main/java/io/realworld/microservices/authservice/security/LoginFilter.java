@@ -65,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     String token;
     try {
-      token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), rsaJWK);
+      token = JwtUtils.generateToken(user.getEmail(), user.getUserId(), user.getUsername(), rsaJWK);
     } catch (Exception ex) {
       throw new IllegalStateException(ex);
     }

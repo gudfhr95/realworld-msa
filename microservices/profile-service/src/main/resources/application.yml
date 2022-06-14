@@ -1,7 +1,7 @@
+server.port: 9001
+
 app:
   auth-service: auth-service:9000
-
-server.port: 9001
 
 spring:
   datasource:

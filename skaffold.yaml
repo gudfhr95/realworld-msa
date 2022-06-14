@@ -12,6 +12,10 @@ build:
       context: microservices/profile-service
       docker:
         dockerfile: Dockerfile
+    - image: realworld-msa/article-service
+      context: microservices/article-service
+      docker:
+        dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
@@ -27,3 +31,6 @@ portForward:
   - resourceType: service
     resourceName: profile-service
     port: 9001
+  - resourceType: service
+    resourceName: article-service
+    port: 9002
