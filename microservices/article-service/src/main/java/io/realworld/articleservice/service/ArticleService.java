@@ -85,10 +85,24 @@ public class ArticleService {
     return comment;
   }
 
+  public void removeComment(String slug, Long commentId) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    Comment comment = findCommentById(commentId).orElseThrow();
+
+    article.removeComment(comment);
+
+    commentRepository.delete(comment);
+  }
+
   public List<Comment> findCommentsInArticleBySlug(String slug) {
     Article article = findArticleBySlug(slug).orElseThrow();
 
     return article.getComments();
+  }
+
+  private Optional<Comment> findCommentById(Long commentId) {
+    return commentRepository.findById(commentId);
   }
 
   private String makeSlug(String title) {

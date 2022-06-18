@@ -123,14 +123,6 @@ public class ArticleController {
         request.getHeader(AUTHORIZATION));
   }
 
-  @PostMapping("/articles/{slug}/comments")
-  public CommentDto addComment(@PathVariable String slug, @RequestBody AddCommentDto body,
-      HttpServletRequest request) {
-    Comment newComment = articleService.addComment(slug, body.getBody(), getUsername());
-
-    return makeResponse(newComment, newComment.getAuthor(), request.getHeader(AUTHORIZATION));
-  }
-
   @GetMapping("/articles/{slug}/comments")
   public CommentListDto getComments(@PathVariable String slug, HttpServletRequest request) {
     List<Comment> comments = articleService.findCommentsInArticleBySlug(slug);
@@ -145,6 +137,19 @@ public class ArticleController {
     response.setCommentList(commentDtoList);
 
     return response;
+  }
+
+  @PostMapping("/articles/{slug}/comments")
+  public CommentDto addComment(@PathVariable String slug, @RequestBody AddCommentDto body,
+      HttpServletRequest request) {
+    Comment newComment = articleService.addComment(slug, body.getBody(), getUsername());
+
+    return makeResponse(newComment, newComment.getAuthor(), request.getHeader(AUTHORIZATION));
+  }
+
+  @DeleteMapping("/articles/{slug}/comments/{commentId}")
+  public void deleteComment(@PathVariable String slug, @PathVariable Long commentId) {
+    articleService.removeComment(slug, commentId);
   }
 
   private String getUsername() {
