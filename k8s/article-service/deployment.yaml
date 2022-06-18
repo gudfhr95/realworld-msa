@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: article-service
+  labels:
+    app: article-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: article-service
+  template:
+    metadata:
+      labels:
+        app: article-service
+    spec:
+      containers:
+        - name: article-service
+          image: realworld-msa/article-service

@@ -1,4 +1,4 @@
-package io.realworld.microservices.profileservice.dto;
+package io.realworld.articleservice.dto;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 
-@JsonTypeName("profile")
+@JsonTypeName("comment")
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
 @Data
-public class ProfileDto {
+public class CommentDto {
 
-  public String username;
-  public String bio;
-  public String image;
-  public boolean following;
+  public String body;
+  public String createdAt;
+  public String updatedAt;
+  public AuthorDto author;
 }

@@ -2,8 +2,8 @@ package io.realworld.microservices.profileservice.mapper;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+import io.realworld.api.dto.ProfileDto;
 import io.realworld.api.message.UserMessage;
-import io.realworld.microservices.profileservice.dto.ProfileDto;
 import io.realworld.microservices.profileservice.entity.Profile;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

@@ -28,3 +28,10 @@ spec:
                 name: profile-service
                 port:
                   number: 9001
+          - path: /api/articles
+            pathType: Prefix
+            backend:
+              service:
+                name: article-service
+                port:
+                  number: 9002
