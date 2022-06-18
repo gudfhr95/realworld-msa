@@ -1,7 +1,9 @@
 package io.realworld.articleservice.service;
 
 import io.realworld.articleservice.entity.Article;
+import io.realworld.articleservice.repository.ArticleQueryRepository;
 import io.realworld.articleservice.repository.ArticleRepository;
+import io.realworld.articleservice.repository.condition.ArticleSearchCondition;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,11 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
 
   private final ArticleRepository articleRepository;
+  private final ArticleQueryRepository articleQueryRepository;
+
+  public List<Article> searchArticle(ArticleSearchCondition condition, int offset, int limit) {
+    return articleQueryRepository.search(condition, offset, limit);
+  }
 
   public Article createArticle(String title, String description, String body, String[] tagList,
       String author) {

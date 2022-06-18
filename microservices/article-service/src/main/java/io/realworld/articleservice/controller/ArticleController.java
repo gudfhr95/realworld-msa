@@ -6,12 +6,16 @@ import static org.springframework.http.HttpMethod.GET;
 import com.nimbusds.jwt.JWTClaimsSet;
 import io.realworld.api.dto.ProfileDto;
 import io.realworld.articleservice.dto.ArticleDto;
+import io.realworld.articleservice.dto.ArticleListDto;
 import io.realworld.articleservice.dto.AuthorDto;
 import io.realworld.articleservice.dto.CreateArticleDto;
 import io.realworld.articleservice.dto.UpdateArticleDto;
 import io.realworld.articleservice.entity.Article;
 import io.realworld.articleservice.mapper.ArticleMapper;
+import io.realworld.articleservice.repository.condition.ArticleSearchCondition;
 import io.realworld.articleservice.service.ArticleService;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,6 +57,26 @@ public class ArticleController {
         body.getBody(), body.getTagList(), username);
 
     return makeResponse(article, username, request.getHeader(AUTHORIZATION));
+  }
+
+  @GetMapping("/articles")
+  public ArticleListDto getArticlesBySearchCondition(
+      ArticleSearchCondition condition,
+      @RequestParam(name = "offset", defaultValue = "0") int offset,
+      @RequestParam(name = "limit", defaultValue = "20") int limit,
+      HttpServletRequest request
+  ) {
+    List<Article> articles = articleService.searchArticle(condition, offset, limit);
+
+    List<ArticleDto> articleDtoList = articles.stream().map(
+            (article -> makeResponse(article, article.getAuthor(), request.getHeader(AUTHORIZATION)))
+        )
+        .collect(Collectors.toList());
+
+    ArticleListDto response = new ArticleListDto();
+    response.setArticleList(articleDtoList);
+
+    return response;
   }
 
   @GetMapping("/articles/{slug}")

@@ -21,7 +21,7 @@ class ArticleMapperTest {
         .description("description")
         .body("body")
         .tagList(Collections.singleton("tag"))
-        .favoritedUsers(Collections.singleton(1L))
+        .favoritedUsers(Collections.singleton("favorited"))
         .build();
 
     ArticleDto articleDto = articleMapper.entityToDto(article);

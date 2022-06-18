@@ -46,7 +46,7 @@ public class Article extends BaseTime {
 
   @Builder.Default
   @ElementCollection
-  private Set<Long> favoritedUsers = new HashSet<>();
+  private Set<String> favoritedUsers = new HashSet<>();
 
   private String author;
 }

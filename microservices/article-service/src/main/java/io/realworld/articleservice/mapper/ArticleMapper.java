@@ -23,7 +23,7 @@ public interface ArticleMapper {
   ArticleDto entityToDto(Article article);
 
   @Named("favoritesCount")
-  public static int countFavorites(Set<Long> favoritedUsers) {
+  public static int countFavorites(Set<String> favoritedUsers) {
     return favoritedUsers.size();
   }
 

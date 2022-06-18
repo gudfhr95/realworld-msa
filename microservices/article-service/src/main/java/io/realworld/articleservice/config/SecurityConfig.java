@@ -1,5 +1,7 @@
 package io.realworld.articleservice.config;
 
+import static org.springframework.http.HttpMethod.GET;
+
 import io.realworld.articleservice.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logout().disable()
         .authorizeRequests()
         .antMatchers("/actuator/**").permitAll()
+        .antMatchers(GET, "/api/articles").permitAll()
         .anyRequest().authenticated()
         .and()
         .addFilterAt(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
