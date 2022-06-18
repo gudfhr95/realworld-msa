@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: realworld-msa-ingress
+spec:
+  rules:
+    - host: realworld-msa.io
+      http:
+        paths:
+          - path: /api/user
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /api/profiles
+            pathType: Prefix
+            backend:
+              service:
+                name: profile-service
+                port:
+                  number: 9001
+          - path: /api/articles
+            pathType: Prefix
+            backend:
+              service:
+                name: article-service
+                port:
+                  number: 9002

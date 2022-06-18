@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  auth-server:
+    build: microservices/auth-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  profile-service:
+    build: microservices/profile-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+  
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=user-db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    healthcheck:
+      test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
+      interval: 20s
+      timeout: 5s
+      retries: 10

@@ -1,0 +1,5 @@
+include ':api'
+include ':util'
+include ':microservices:auth-service'
+include ':microservices:profile-service'
+include ':microservices:article-service'
