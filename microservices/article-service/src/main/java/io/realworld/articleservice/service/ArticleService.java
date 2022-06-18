@@ -85,6 +85,12 @@ public class ArticleService {
     return comment;
   }
 
+  public List<Comment> findCommentsInArticleBySlug(String slug) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    return article.getComments();
+  }
+
   private String makeSlug(String title) {
     return title.toLowerCase().replace(' ', '-');
   }

@@ -10,6 +10,7 @@ import io.realworld.articleservice.dto.ArticleDto;
 import io.realworld.articleservice.dto.ArticleListDto;
 import io.realworld.articleservice.dto.AuthorDto;
 import io.realworld.articleservice.dto.CommentDto;
+import io.realworld.articleservice.dto.CommentListDto;
 import io.realworld.articleservice.dto.CreateArticleDto;
 import io.realworld.articleservice.dto.UpdateArticleDto;
 import io.realworld.articleservice.entity.Article;
@@ -128,6 +129,22 @@ public class ArticleController {
     Comment newComment = articleService.addComment(slug, body.getBody(), getUsername());
 
     return makeResponse(newComment, newComment.getAuthor(), request.getHeader(AUTHORIZATION));
+  }
+
+  @GetMapping("/articles/{slug}/comments")
+  public CommentListDto getComments(@PathVariable String slug, HttpServletRequest request) {
+    List<Comment> comments = articleService.findCommentsInArticleBySlug(slug);
+
+    List<CommentDto> commentDtoList = comments.stream()
+        .map(
+            comment -> makeResponse(comment, comment.getAuthor(), request.getHeader(AUTHORIZATION))
+        )
+        .collect(Collectors.toList());
+
+    CommentListDto response = new CommentListDto();
+    response.setCommentList(commentDtoList);
+
+    return response;
   }
 
   private String getUsername() {
