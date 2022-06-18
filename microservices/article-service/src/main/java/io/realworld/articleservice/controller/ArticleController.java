@@ -109,6 +109,14 @@ public class ArticleController {
         request.getHeader(AUTHORIZATION));
   }
 
+  @DeleteMapping("/articles/{slug}/favorite")
+  public ArticleDto unfavorite(@PathVariable String slug, HttpServletRequest request) {
+    Article unfavoritedArticle = articleService.unfavoriteArticleBySlug(slug, getUsername());
+
+    return makeResponse(unfavoritedArticle, unfavoritedArticle.getAuthor(),
+        request.getHeader(AUTHORIZATION));
+  }
+
   private String getUsername() {
     JWTClaimsSet claimsSet = getJwtClaimsSet();
 

@@ -53,6 +53,14 @@ public class ArticleService {
     return article;
   }
 
+  public Article unfavoriteArticleBySlug(String slug, String username) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    article.removeFavoritedUser(username);
+
+    return article;
+  }
+
   public Optional<Article> findArticleBySlug(String slug) {
     return articleRepository.findBySlug(slug);
   }

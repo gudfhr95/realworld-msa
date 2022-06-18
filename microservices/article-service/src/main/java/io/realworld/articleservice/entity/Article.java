@@ -56,4 +56,11 @@ public class Article extends BaseTime {
 
     favoritedUsers = newFavoritedUsers;
   }
+
+  public void removeFavoritedUser(String username) {
+    Set<String> newFavoritedUsers = new HashSet<>(favoritedUsers);
+    newFavoritedUsers.remove(username);
+
+    favoritedUsers = newFavoritedUsers;
+  }
 }
