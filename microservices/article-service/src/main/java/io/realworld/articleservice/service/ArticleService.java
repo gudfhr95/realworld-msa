@@ -1,8 +1,10 @@
 package io.realworld.articleservice.service;
 
 import io.realworld.articleservice.entity.Article;
+import io.realworld.articleservice.entity.Comment;
 import io.realworld.articleservice.repository.ArticleQueryRepository;
 import io.realworld.articleservice.repository.ArticleRepository;
+import io.realworld.articleservice.repository.CommentRepository;
 import io.realworld.articleservice.repository.condition.ArticleSearchCondition;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +20,8 @@ public class ArticleService {
 
   private final ArticleRepository articleRepository;
   private final ArticleQueryRepository articleQueryRepository;
+
+  private final CommentRepository commentRepository;
 
   public List<Article> searchArticle(ArticleSearchCondition condition, int offset, int limit) {
     return articleQueryRepository.search(condition, offset, limit);
@@ -63,6 +67,22 @@ public class ArticleService {
 
   public Optional<Article> findArticleBySlug(String slug) {
     return articleRepository.findBySlug(slug);
+  }
+
+  public Comment addComment(String slug, String body, String author) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    Comment comment = Comment.builder()
+        .body(body)
+        .author(author)
+        .article(article)
+        .build();
+
+    commentRepository.save(comment);
+
+    article.addComment(comment);
+
+    return comment;
   }
 
   private String makeSlug(String title) {

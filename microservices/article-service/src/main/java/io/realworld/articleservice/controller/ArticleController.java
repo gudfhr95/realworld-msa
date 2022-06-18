@@ -5,13 +5,17 @@ import static org.springframework.http.HttpMethod.GET;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import io.realworld.api.dto.ProfileDto;
+import io.realworld.articleservice.dto.AddCommentDto;
 import io.realworld.articleservice.dto.ArticleDto;
 import io.realworld.articleservice.dto.ArticleListDto;
 import io.realworld.articleservice.dto.AuthorDto;
+import io.realworld.articleservice.dto.CommentDto;
 import io.realworld.articleservice.dto.CreateArticleDto;
 import io.realworld.articleservice.dto.UpdateArticleDto;
 import io.realworld.articleservice.entity.Article;
+import io.realworld.articleservice.entity.Comment;
 import io.realworld.articleservice.mapper.ArticleMapper;
+import io.realworld.articleservice.mapper.CommentMapper;
 import io.realworld.articleservice.repository.condition.ArticleSearchCondition;
 import io.realworld.articleservice.service.ArticleService;
 import java.util.List;
@@ -47,6 +51,7 @@ public class ArticleController {
   private final RestTemplate restTemplate;
 
   private final ArticleMapper articleMapper;
+  private final CommentMapper commentMapper;
 
   private final ArticleService articleService;
 
@@ -117,6 +122,14 @@ public class ArticleController {
         request.getHeader(AUTHORIZATION));
   }
 
+  @PostMapping("/articles/{slug}/comments")
+  public CommentDto addComment(@PathVariable String slug, @RequestBody AddCommentDto body,
+      HttpServletRequest request) {
+    Comment newComment = articleService.addComment(slug, body.getBody(), getUsername());
+
+    return makeResponse(newComment, newComment.getAuthor(), request.getHeader(AUTHORIZATION));
+  }
+
   private String getUsername() {
     JWTClaimsSet claimsSet = getJwtClaimsSet();
 
@@ -139,6 +152,15 @@ public class ArticleController {
     }
 
     return articleDto;
+  }
+
+  public CommentDto makeResponse(Comment comment, String username, String token) {
+    CommentDto commentDto = commentMapper.entityToDto(comment);
+
+    ProfileDto profileDto = getProfile(username, token);
+    commentDto.setAuthor(makeAuthorDto(profileDto));
+
+    return commentDto;
   }
 
   private ProfileDto getProfile(String username, String token) {

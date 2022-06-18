@@ -1,13 +1,18 @@
 package io.realworld.articleservice.entity;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
@@ -32,6 +37,7 @@ public class Article extends BaseTime {
   @Version
   private int version;
 
+  @Column(unique = true)
   private String slug;
 
   private String title;
@@ -50,6 +56,9 @@ public class Article extends BaseTime {
 
   private String author;
 
+  @OneToMany(mappedBy = "article", cascade = ALL)
+  private List<Comment> comments = new ArrayList<>();
+
   public void addFavoritedUser(String username) {
     Set<String> newFavoritedUsers = new HashSet<>(favoritedUsers);
     newFavoritedUsers.add(username);
@@ -62,5 +71,14 @@ public class Article extends BaseTime {
     newFavoritedUsers.remove(username);
 
     favoritedUsers = newFavoritedUsers;
+  }
+
+  public void addComment(Comment comment) {
+    comments.add(comment);
+    comment.setArticle(this);
+  }
+
+  public void removeComment(Comment comment) {
+    comments.remove(comment);
   }
 }
