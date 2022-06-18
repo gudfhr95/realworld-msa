@@ -30,6 +30,12 @@ public class ArticleService {
     return article;
   }
 
+  public void deleteArticleBySlug(String slug) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    articleRepository.delete(article);
+  }
+
   public Optional<Article> findArticleBySlug(String slug) {
     return articleRepository.findBySlug(slug);
   }

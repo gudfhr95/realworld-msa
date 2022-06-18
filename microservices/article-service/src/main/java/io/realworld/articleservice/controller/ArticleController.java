@@ -20,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,6 +61,11 @@ public class ArticleController {
     Article updatedArticle = articleMapper.updateArticleDtoToEntity(body, article);
 
     return makeResponse(updatedArticle, getUsername(), request.getHeader(AUTHORIZATION));
+  }
+
+  @DeleteMapping("/articles/{slug}")
+  public void deleteArticle(@PathVariable String slug) {
+    articleService.deleteArticleBySlug(slug);
   }
 
   private String getUsername() {
