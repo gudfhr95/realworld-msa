@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ArticleService {
 
@@ -41,6 +43,14 @@ public class ArticleService {
     Article article = findArticleBySlug(slug).orElseThrow();
 
     articleRepository.delete(article);
+  }
+
+  public Article favoriteArticleBySlug(String slug, String username) {
+    Article article = findArticleBySlug(slug).orElseThrow();
+
+    article.addFavoritedUser(username);
+
+    return article;
   }
 
   public Optional<Article> findArticleBySlug(String slug) {

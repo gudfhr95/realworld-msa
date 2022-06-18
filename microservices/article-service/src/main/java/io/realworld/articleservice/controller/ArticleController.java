@@ -101,6 +101,14 @@ public class ArticleController {
     articleService.deleteArticleBySlug(slug);
   }
 
+  @PostMapping("/articles/{slug}/favorite")
+  public ArticleDto favorite(@PathVariable String slug, HttpServletRequest request) {
+    Article favoritedArticle = articleService.favoriteArticleBySlug(slug, getUsername());
+
+    return makeResponse(favoritedArticle, favoritedArticle.getAuthor(),
+        request.getHeader(AUTHORIZATION));
+  }
+
   private String getUsername() {
     JWTClaimsSet claimsSet = getJwtClaimsSet();
 
@@ -118,6 +126,9 @@ public class ArticleController {
 
     ProfileDto profileDto = getProfile(username, token);
     articleDto.setAuthor(makeAuthorDto(profileDto));
+    if (article.getFavoritedUsers().contains(username)) {
+      articleDto.setFavorited(true);
+    }
 
     return articleDto;
   }

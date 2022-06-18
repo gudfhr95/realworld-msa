@@ -49,4 +49,11 @@ public class Article extends BaseTime {
   private Set<String> favoritedUsers = new HashSet<>();
 
   private String author;
+
+  public void addFavoritedUser(String username) {
+    Set<String> newFavoritedUsers = new HashSet<>(favoritedUsers);
+    newFavoritedUsers.add(username);
+
+    favoritedUsers = newFavoritedUsers;
+  }
 }
